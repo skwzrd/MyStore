@@ -1,0 +1,17 @@
+{
+  "name": "my_store_server",
+  "version": "1.0.0",
+  "description": "An ecommerce web app backend.",
+  "main": "index.js",
+  "repository": "https://github.com/skwzrd/MyStore",
+  "author": "Michael Hladun <mp.hladun@gmail.com>",
+  "license": "CC BY 4",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "pg": "^8.3.3"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  }
+}

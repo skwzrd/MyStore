@@ -1,9 +1,10 @@
 {
-  "name": "my_store",
+  "name": "my_store_client",
   "version": "1.0.0",
-  "description": "An ecommerce web app.",
+  "description": "An ecommerce web app frontend.",
   "main": "index.js",
   "author": "Michael Hladun <mp.hladun@gmail.com>",
+  "license": "CC BY 4",
   "dependencies": {
     "@material-ui/core": "4.11.0",
     "@material-ui/icons": "^4.9.1",

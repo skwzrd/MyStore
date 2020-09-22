@@ -18,7 +18,7 @@ import { appStore } from './components/stores/AppStore';
 // configure for our text based pages
 const messages = {
   titles: {
-    home: "Welcome, To My Store!",
+    home: "Welcome, To myStore!",
     about: "About Us",
     contact: "Contact Us",
     shop: "Shop",
