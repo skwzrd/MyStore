@@ -7,3 +7,5 @@ An e-commerce web app I am working on. This is still in the very early stages of
 Below is a preview of what things are looking like right now.
 
 ![Preview](resources/snapshot.png)
+
+![Preview](resources/snapshot.gif)

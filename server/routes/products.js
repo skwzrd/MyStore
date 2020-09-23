@@ -1,6 +1,20 @@
 const express = require('express')
 const auth = require('../middleware/auth')
 const pool = require('../utils/db_connect')
+const uuid = require('uuid');
+
+const multer  = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, uuid.v4() + "." + file.originalname.split(".")[1]);
+  }
+})
+
+const upload = multer({ storage: storage });
 
 const router = express.Router();
 
@@ -18,13 +32,19 @@ const errorHandler = (err, res) => {
   res.status(404).json({msg: "Page Not Found"})
 }
 
+const makePaths = (rows) => {
+  rows.forEach((row, i) => {
+    rows[i].image_filename = `/uploads/${row.image_filename}`;
+  });
+  return rows;
+}
 
 // @desc get all products
 // @access public
 router.get('/', (req, res) => {
   pool
   .query('select * from product;')
-  .then(psql => res.json(psql.rows))
+  .then(psql => res.json(makePaths(psql.rows)))
   .catch(err => errorHandler(err))
 });
 
@@ -60,22 +80,31 @@ router.get('/page/:page', (req, res) => {
 
 // @desc creates a product
 // @access private
-router.post('/', auth, (req, res) => {
-  const b = req.body;
+router.post('/', auth, upload.single("imageFile"), (req, res) => {
   pool
   .query(`
     insert into product (
       name,
+      description,
       price,
       currency,
       image_filename,
       image_ext,
       quantity
     )
-    values ($1, $2, $3, $4, $5, $6);`,
-    [b.name, b.price, b.currency, b.image_filename, b.image_ext, b.quantity])
+    values ($1, $2, $3, $4, $5, $6, $7);`,
+    [
+      req.body.name,
+      req.body.description,
+      Number(req.body.price),
+      req.body.currency,
+      req.file.filename,
+      req.file.originalname.split(".")[1],
+      Number(req.body.quantity)
+    ]
+  )
   .then(psql => res.json({msg: "Product Created"}))
-  .catch(err => errorHandler(err, res))
+  .catch(err => () => {errorHandler(err, res); res.json({msg: "Error Creating Product"})})
 });
 
 
@@ -87,13 +116,14 @@ router.put('/:id', auth, (req, res) => {
   .query(`
     update product set
       name = $1,
-      price = $2,
-      currency = $3,
-      image_filename = $4,
-      image_ext = $5,
-      quantity = $6
-    where product_id = $7;
-  `, [b.name, b.price, b.currency, b.image_filename, b.image_ext, b.quantity, req.params.id])
+      description = $2,
+      price = $3,
+      currency = $4,
+      image_filename = $5,
+      image_ext = $6,
+      quantity = $7
+    where product_id = $8;
+  `, [b.name, b.description, b.price, b.currency, b.image_filename, b.image_ext, b.quantity, req.params.id])
   .then(psql => res.json({msg: "Product Updated"}))
   .catch(err => errorHandler(err, res))
 });
@@ -112,6 +142,5 @@ router.delete('/:id', auth, (req, res) => {
   .then(psql => res.json({msg: "Product Deleted"}))
   .catch(err => errorHandler(err, res))
 });
-
 
 module.exports = router;

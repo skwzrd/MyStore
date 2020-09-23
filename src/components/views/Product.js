@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 
 export default function Product({ item }) {
   const classes = useStyles();
-  const image = require(`../../images/${item.id}.${item.imageExt}`);
+  if(!item.name) return null;
   return (
     <Card className={classes.root}>
       <Typography variant="h5" component="h2">
@@ -32,7 +32,7 @@ export default function Product({ item }) {
       <Typography color="textSecondary">
         {item.price} {item.currency}
       </Typography>
-      <img src={image} alt={item.name} className={classes.image}/>
+      <img src={item.image_filename} alt={item.name} className={classes.image}/>
     </Card>
   );
 }
