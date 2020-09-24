@@ -1,9 +1,9 @@
 import React from 'react';
-import { useStyleChild } from '../../styles/Child';
+import { useBodyStyle } from '../../styles/BodyStyle';
 
 
 export default function Cart() {
-  const classes = useStyleChild();
+  const classes = useBodyStyle();
   return (
     <div className={classes.root}>
       <p>Items: 3</p>

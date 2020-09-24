@@ -1,9 +1,9 @@
 import React from 'react';
-import { useStyleChild } from '../../styles/Child';
+import { useBodyStyle } from '../../styles/BodyStyle';
 
 
 export default function Contact() {
-  const classes = useStyleChild();
+  const classes = useBodyStyle();
   return (
     <div className={classes.root}>
       <p>Email: mp.hladun@gmail.com</p>

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { view } from '@risingstack/react-easy-state';
-import { products } from '../stores/ProductStore';
+import { productStore } from '../stores/ProductStore';
 import { makeStyles } from '@material-ui/core/styles';
-import Product from '../views/Product';
+import Product from '../views/ProductCard';
+import { Link } from '@reach/router';
 
 const useStyles = makeStyles({
   root: {
@@ -10,8 +11,11 @@ const useStyles = makeStyles({
     display: "flex",
     marginTop: "20px",
     justifyContent: "center",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
+  link: {
+    textDecoration: "none",
+  }
 });
 
 
@@ -19,13 +23,17 @@ function Products() {
   const classes = useStyles();
 
   useEffect(() => {
-    // populate products.items
-    products.getAllProducts();
+    // populate productStore.items
+    productStore.getAllProducts();
   }, []);
 
   return (
     <div className={classes.root}>
-      { products.items.map((item, i) => <Product key={i} item={item}/>) }
+      { productStore.itemArray.map((item, i) => 
+        <Link to={String(item.product_id)} key={i} className={classes.link}>
+          <Product key={i} item={item}/>
+        </Link>
+      )}
     </div>
   )
 }

@@ -4,8 +4,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-
 ReactDOM.render(
+  // removes the warning cause by material ui
+  // https://stackoverflow.com/a/61705445/9576988
   // <React.StrictMode>
   //   <App />
   // </React.StrictMode>,

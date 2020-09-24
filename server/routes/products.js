@@ -56,7 +56,7 @@ router.get('/:id', (req, res) => {
 
   pool
   .query('select * from product where product_id = $1;', [id])
-  .then(psql => res.json(psql.rows))
+  .then(psql => res.json(makePaths(psql.rows)[0]))
   .catch(err => errorHandler(err, res))
 });
 
@@ -73,7 +73,7 @@ router.get('/page/:page', (req, res) => {
 
   pool
   .query('select * from product where product_id >= $1 and product_id < $2;', [lower, upper])
-  .then(psql => res.json(psql.rows))
+  .then(psql => res.json(makePaths(psql.rows)))
   .catch(err => errorHandler(err, res))
 });
 

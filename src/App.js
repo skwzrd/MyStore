@@ -3,7 +3,7 @@ import { Router } from '@reach/router';
 import { view } from '@risingstack/react-easy-state';
 
 import Banner from './components/views/Banner';
-import Info from './components/views/Info';
+import Wrapper from './components/views/Wrapper';
 
 import Home from './components/containers/Home';
 import About from './components/containers/About';
@@ -11,6 +11,7 @@ import Contact from './components/containers/Contact';
 import Shop from './components/containers/Shop';
 import Cart from './components/containers/Cart';
 import Login from './components/containers/Login';
+import ProductView from './components/views/ProductView';
 
 import { appStore } from './components/stores/AppStore';
 
@@ -34,13 +35,14 @@ function App() {
     <>
       <Banner/>
       <Router>
-        <Info path="/" title={messages.titles.home} child={<Home/>}/>
-        <Info path="/about" title={messages.titles.about} child={<About/>}/>
-        <Info path="/contact" title={messages.titles.contact} child={<Contact/>}/>
-        <Info path="/shop" title={messages.titles.shop} child={<Shop/>}/>
-        <Info path="/cart" title={messages.titles.cart} child={<Cart/>}/>
-        <Info path="/login" title={messages.titles.login} child={<Login/>}/>
-        <Info default title={messages.titles.notFound} />
+        <Wrapper path="/" title={messages.titles.home} child={<Home/>}/>
+        <Wrapper path="/about" title={messages.titles.about} child={<About/>}/>
+        <Wrapper path="/contact" title={messages.titles.contact} child={<Contact/>}/>
+        <Wrapper path="/shop" title={messages.titles.shop} child={<Shop/>}/>
+        <Wrapper path="/shop/:product_id" child={<ProductView/>}/>
+        <Wrapper path="/cart" title={messages.titles.cart} child={<Cart/>}/>
+        <Wrapper path="/login" title={messages.titles.login} child={<Login/>}/>
+        <Wrapper default title={messages.titles.notFound} />
       </Router>
     </>
   );

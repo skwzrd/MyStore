@@ -1,8 +1,8 @@
 import React from 'react';
-import { useStyleChild } from '../../styles/Child';
+import { useBodyStyle } from '../../styles/BodyStyle';
 
 export default function Home() {
-  const classes = useStyleChild();
+  const classes = useBodyStyle();
   return (
     <div className={classes.root}>
       This store is powered using many technologies including:

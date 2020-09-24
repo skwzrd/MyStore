@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { view } from '@risingstack/react-easy-state';
 import axios from 'axios';
-import { products } from '../stores/ProductStore';
+import { productStore } from '../stores/ProductStore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +15,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Fab from "@material-ui/core/Fab";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
-
+import palette from '../../styles/palette.json';
 
 const useStyles = makeStyles({
   // dialog/modal styles
@@ -23,11 +23,12 @@ const useStyles = makeStyles({
     display: "none"
   },
   button: {
-    backgroundColor: "#3d405b",
-    color: "white",
-    margin: "10px",
+    backgroundColor: palette.button,
+    color: palette.text,
+    padding: "15px",
+    margin: "15px",
     '&:hover': {
-      background: "#3d405b",
+      background: palette.button_hover,
    },
   },
   row: {
@@ -114,7 +115,7 @@ function ModifyPoduct() {
     if(result === "success"){
       toast.success(msg, options);
       setOpen(false);
-      products.getAllProducts();
+      productStore.getAllProducts();
       return;
     }
     toast.error(msg, options);
@@ -158,7 +159,7 @@ function ModifyPoduct() {
 
       <Button variant="contained" color="primary" onClick={handleClickOpen}>Add</Button>
 
-      {/* <Button variant="contained" color="secondary" onClick={() => products.removeItem(2)}>Remove</Button> */}
+      {/* <Button variant="contained" color="secondary" onClick={() => productStore.removeItem(2)}>Remove</Button> */}
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add New Product</DialogTitle>
