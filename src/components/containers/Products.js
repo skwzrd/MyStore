@@ -23,15 +23,15 @@ function Products() {
   const classes = useStyles();
 
   useEffect(() => {
-    // populate productStore.items
+    // populate productStore.products
     productStore.getAllProducts();
   }, []);
 
   return (
     <div className={classes.root}>
-      { productStore.itemArray.map((item, i) => 
-        <Link to={String(item.product_id)} key={i} className={classes.link}>
-          <Product key={i} item={item}/>
+      { productStore.productArray.map((product, i) => 
+        <Link to={String(product.product_id)} key={i} className={classes.link}>
+          <Product key={i} product={product}/>
         </Link>
       )}
     </div>

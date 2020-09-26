@@ -47,29 +47,29 @@ const useStyles = makeStyles({
 
 const description_length = 30;
 
-function Product({ item }) {
+function Product({ product }) {
   const classes = useStyles();
 
-  if(!item.name) return null;
+  if(!product.name) return null;
   return (
     <Card className={classes.root}>
 
       <Typography variant="h5" className={classes.title}>
-        {item.name}
+        {product.name}
       </Typography>
 
       <div className={classes.image_div}>
-        <img src={item.image_filename} alt={item.name} className={classes.image}/>
+        <img src={product.image_filename} alt={product.name} className={classes.image}/>
       </div>
 
       <div className={classes.row}>
-        <div>{item.price} {item.currency}</div>
-        {appStore.auth ? <div>Qty: {item.quantity}</div> : null}
+        <div>{product.price} {product.currency}</div>
+        {appStore.auth ? <div>Qty: {product.quantity}</div> : null}
       </div>
 
       <div className={classes.row}>
         <div className={classes.description}>
-          {item.description.length > description_length ? item.description.slice(0, description_length) : item.description}
+          {product.description.length > description_length ? product.description.slice(0, description_length) : product.description}
         </div>
         More Info
       </div>

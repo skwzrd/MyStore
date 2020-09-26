@@ -67,9 +67,9 @@ router.get('/page/:page', (req, res) => {
   const page = validateNumber(req.params.page, "Page NaN", res)
 
   // pagination: below will get products 1-9, 10-19, etc.
-  const page_items = 10;
-  const lower = page === 1 ? 1 : (page - 1) * page_items;
-  const upper = page * page_items;
+  const page_products = 10;
+  const lower = page === 1 ? 1 : (page - 1) * page_products;
+  const upper = page * page_products;
 
   pool
   .query('select * from product where product_id >= $1 and product_id < $2;', [lower, upper])

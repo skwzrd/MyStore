@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   row: {
     display: "block"
   },
-  item: {
+  product: {
     margin: "10px"
   }
 });
@@ -165,28 +165,28 @@ function ModifyPoduct() {
         <DialogTitle>Add New Product</DialogTitle>
         <DialogContent>
           <TextField
-            className={`${classes.item} ${classes.row}`}
+            className={`${classes.product} ${classes.row}`}
             autoFocus
             value={name}
             label="Name"
             onChange={e => setName(e.target.value)}
           />
           <TextField
-            className={`${classes.item} ${classes.row}`}
+            className={`${classes.product} ${classes.row}`}
             value={description}
             label="Description"
             fullWidth
             onChange={e => setDescription(e.target.value)}
           />
           <TextField
-            className={classes.item}
+            className={classes.product}
             value={price}
             label="Price"
             placeholder={"0.00"}
             onChange={e => setPrice(e.target.value)}
           />
           <TextField
-            className={classes.item}
+            className={classes.product}
             select
             value={currency}
             label="Currency"
@@ -200,7 +200,7 @@ function ModifyPoduct() {
             ))}
           </TextField>
           <TextField
-            className={`${classes.row}, ${classes.item}`}
+            className={`${classes.row}, ${classes.product}`}
             value={quantity}
             placeholder={"0"}
             label="Quantity In Stock"

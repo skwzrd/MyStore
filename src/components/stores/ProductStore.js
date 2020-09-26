@@ -3,23 +3,23 @@ import axios from 'axios';
 
 const config = { headers: { 'Content-Type': 'application/json' } };
 
-// transforms an array of item objects into an object
-// with product_id keys, and item object values
-const makeIdObject = (itemArray) => {
+// transforms an array of products objects into an object
+// with product_id keys, and products object values
+const makeIdObject = (productArray) => {
   let id_object = {};
-  itemArray.forEach(item => {
-    id_object[item.product_id] = item;
+  productArray.forEach(product => {
+    id_object[product.product_id] = product;
   });
   return id_object;
 }
 
 export const productStore = store({
-  idItems: {},
+  productsById: {},
 
-  get itemArray(){
+  get productArray(){
     let array = [];
-    Object.keys(productStore.idItems).map(key => {
-      array.push(productStore.idItems[key]);
+    Object.keys(productStore.productsById).map(key => {
+      return array.push(productStore.productsById[key]);
     })
     return array;
   },
@@ -27,33 +27,33 @@ export const productStore = store({
   getAllProducts(){
     axios.get('/products', config)
     .then(res => {
-      productStore.items = res.data;
-      productStore.idItems = makeIdObject(res.data);
+      productStore.products = res.data;
+      productStore.productsById = makeIdObject(res.data);
     })
     .catch(err => console.log(err.stack));
   },
 
-  addItem(product){
-    productStore.itemArray.push(product);
-    productStore.idItems[product.product_id] = product;
+  addProduct(product){
+    productStore.productArray.push(product);
+    productStore.productsById[product.product_id] = product;
   },
 
-  fetchItem(product_id){
+  fetchProduct(product_id){
     axios.get(`/products/${product_id}`)
-    .then(res => productStore.addItem(res.data))
+    .then(res => productStore.addProduct(res.data))
     .catch(err => console.log(err));
   },
 
-  itemExists(product_id){
-    return productStore.idItems[product_id] ? productStore.idItems[product_id] : false;
+  productExists(product_id){
+    return productStore.productsById[product_id] ? productStore.productsById[product_id] : false;
   },
 
-  getItem(product_id){
-    // gets item if it doesnt exist and returns item (false if it doesnt exist in psql)
-    if(!productStore.itemExists(product_id)){
-      productStore.fetchItem(product_id);
+  getProduct(product_id){
+    // gets products if it doesnt exist and returns products (false if it doesnt exist in psql)
+    if(!productStore.productExists(product_id)){
+      productStore.fetchProduct(product_id);
     }
-    return productStore.itemExists(product_id) ? productStore.idItems[product_id] : false;
+    return productStore.productExists(product_id) ? productStore.productsById[product_id] : false;
   },
 
 });

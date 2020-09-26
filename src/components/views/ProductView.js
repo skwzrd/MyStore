@@ -3,7 +3,6 @@ import { useParams } from "@reach/router";
 import { view } from '@risingstack/react-easy-state';
 import { productStore } from '../stores/ProductStore';
 import { appStore } from '../stores/AppStore';
-import { useBodyStyle } from '../../styles/BodyStyle';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -49,7 +48,7 @@ function ProductView() {
   const params = useParams();
 
   const { product_id } = params;
-  const product = productStore.getItem(product_id);
+  const product = productStore.getProduct(product_id);
 
   if(!product) return <h1>Product Not Found</h1>;
 
