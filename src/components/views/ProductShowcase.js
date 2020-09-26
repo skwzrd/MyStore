@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 });
 
 
-function ProductView() {
+function ProductShowcase() {
   const classes = useStyles();
   const params = useParams();
 
@@ -76,4 +76,4 @@ function ProductView() {
   )
 }
 
-export default view(ProductView);
+export default view(ProductShowcase);

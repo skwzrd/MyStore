@@ -3,10 +3,13 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import palette from '../../styles/palette.json';
 
 import { appStore } from '../stores/AppStore';
+import { productStore } from '../stores/ProductStore';
 import { view } from '@risingstack/react-easy-state';
 
 
@@ -45,18 +48,22 @@ const useStyles = makeStyles({
   }
 });
 
-const description_length = 30;
+const MAX_DESC_LEN = 30;
 
-function Product({ product }) {
+function ProductCard({ product }) {
   const classes = useStyles();
 
   if(!product.name) return null;
   return (
     <Card className={classes.root}>
-
-      <Typography variant="h5" className={classes.title}>
-        {product.name}
-      </Typography>
+      <div className={classes.row}>
+        <Typography variant="h5" className={classes.title}>
+          {product.name}
+        </Typography>
+        <div>
+          {appStore.auth ? <Button variant="contained" color="secondary" onClick={(e) => { e.preventDefault(); productStore.removeProduct(product.product_id);}}><DeleteIcon/></Button> : null}
+        </div>
+      </div>
 
       <div className={classes.image_div}>
         <img src={product.image_filename} alt={product.name} className={classes.image}/>
@@ -69,7 +76,7 @@ function Product({ product }) {
 
       <div className={classes.row}>
         <div className={classes.description}>
-          {product.description.length > description_length ? product.description.slice(0, description_length) : product.description}
+          {product.description.length > MAX_DESC_LEN ? product.description.slice(0, MAX_DESC_LEN) : product.description}
         </div>
         More Info
       </div>
@@ -77,4 +84,4 @@ function Product({ product }) {
   );
 }
 
-export default view(Product);
+export default view(ProductCard);

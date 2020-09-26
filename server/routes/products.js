@@ -2,6 +2,7 @@ const express = require('express')
 const auth = require('../middleware/auth')
 const pool = require('../utils/db_connect')
 const uuid = require('uuid');
+const fs = require('fs');
 
 const multer  = require('multer');
 
@@ -103,8 +104,8 @@ router.post('/', auth, upload.single("imageFile"), (req, res) => {
       Number(req.body.quantity)
     ]
   )
-  .then(psql => res.json({msg: "Product Created"}))
   .catch(err => () => {errorHandler(err, res); res.json({msg: "Error Creating Product"})})
+  return res.json({msg: "Product Created"});
 });
 
 
@@ -139,8 +140,11 @@ router.delete('/:id', auth, (req, res) => {
     delete from product
     where product_id = $1;
   `, [id])
-  .then(psql => res.json({msg: "Product Deleted"}))
-  .catch(err => errorHandler(err, res))
+  .catch(err => errorHandler(err, res));
+
+  return res.json({msg: "Product Deleted"});
+
+  // fs.unlink() // TODO
 });
 
 module.exports = router;

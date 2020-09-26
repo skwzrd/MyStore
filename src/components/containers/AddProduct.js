@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -39,7 +40,7 @@ const useStyles = makeStyles({
   }
 });
 
-function ModifyPoduct() {
+function AddProduct() {
   const classes = useStyles();
 
   const init = {
@@ -51,6 +52,8 @@ function ModifyPoduct() {
     quantity: "",
     imageFile: null,
     imageName: "",
+
+    error: "",
   }
 
   const [open, setOpen] = useState(init.open);
@@ -61,6 +64,13 @@ function ModifyPoduct() {
   const [quantity, setQuantity] = useState(init.quantity);
   const [imageFile, setImageFile] = useState(init.imageFile);
   const [imageName, setImageName] = useState(init.imageName);
+  
+  const [nameError, setNameError] = useState(init.error);
+  const [descriptionError, setDescriptionError] = useState(init.error);
+  const [priceError, setPriceError] = useState(init.error);
+  const [currencyError, setCurrencyError] = useState(init.error);
+  const [quantityError, setQuantityError] = useState(init.error);
+  const [imageFileError, setImageFileError] = useState(init.error);
 
   const currencies = [
     {
@@ -112,6 +122,7 @@ function ModifyPoduct() {
       progress: undefined,
     };
 
+    
     if(result === "success"){
       toast.success(msg, options);
       setOpen(false);
@@ -119,9 +130,51 @@ function ModifyPoduct() {
       return;
     }
     toast.error(msg, options);
-  }  
+  }
+
+  const fieldsVerified = () => {
+    let verified = true;
+    setNameError(init.error);
+    setDescriptionError(init.error)
+    setPriceError(init.error);
+    setCurrencyError(init.error);
+    setQuantityError(init.error);
+    setImageFileError(init.error);
+
+    setName(name.trim());
+    if(!/[a-zA-Z0-9 ]{2,32}/.test(name)){
+      setNameError("Use 2 to 32 alphanumerics.");
+      verified = false;
+    }
+    else if(!/[a-zA-Z0-9 ]{2,512}/.test(description)){
+      setDescriptionError("Use 2 to 512 characters.");
+      verified = false;
+    }
+    else if(!/^[0-9]{0,5}.[0-9]{0,2}$/.test(price)){
+      setPriceError("Invalid price.");
+      verified = false;
+    }
+    else if(!/^CAD$|^USD$/.test(currency)){
+      setCurrencyError("Unsupported currency.");
+      verified = false;
+    }
+    else if(!/^[0-9]+$/.test(quantity)){
+      setQuantityError("Invalid quanitity.");
+      verified = false;
+    }
+    else if(!(imageFile) ||
+            !(/.png$|.jpg$|.jpeg$/.test(imageFile.name.toLowerCase()))){
+      setImageFileError("Upload a PNG or JPG.");
+      verified = false;
+    }
+    return verified;
+  }
 
   const handleSubmit = () => {
+    if(!fieldsVerified()){
+      return;
+    }
+
     const product = {
       name: name,
       description: description,
@@ -138,8 +191,14 @@ function ModifyPoduct() {
 
     const config = { headers: { 'Content-Type': 'multipart/form-data' } };
     axios.post('/products/', data, config)
-      .then(res => makeToast('success', res.data.msg))
-      .catch(err => makeToast('error', err.stack));
+    .then(res => {
+      console.log(res.data)
+      console.log("EEEE")
+      makeToast('success', res.data.msg);
+    })
+    .catch(err => makeToast('error', err.stack));
+    
+    setOpen(false);
   }
 
   return (
@@ -159,9 +218,12 @@ function ModifyPoduct() {
 
       <Button variant="contained" color="primary" onClick={handleClickOpen}>Add</Button>
 
-      {/* <Button variant="contained" color="secondary" onClick={() => productStore.removeItem(2)}>Remove</Button> */}
-
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth={true}
+        maxWidth = {'sm'}
+      >
         <DialogTitle>Add New Product</DialogTitle>
         <DialogContent>
           <TextField
@@ -170,13 +232,22 @@ function ModifyPoduct() {
             value={name}
             label="Name"
             onChange={e => setName(e.target.value)}
+            required={true}
+            error={nameError ? true : false}
+            helpertext={nameError}
           />
           <TextField
             className={`${classes.product} ${classes.row}`}
             value={description}
             label="Description"
+            multiline={true}
+            rows={1}
+            rowsMax={10}
             fullWidth
             onChange={e => setDescription(e.target.value)}
+            required={true}
+            error={descriptionError ? true : false}
+            helpertext={descriptionError}
           />
           <TextField
             className={classes.product}
@@ -184,6 +255,10 @@ function ModifyPoduct() {
             label="Price"
             placeholder={"0.00"}
             onChange={e => setPrice(e.target.value)}
+            required={true}
+            type="number"
+            error={priceError ? true : false}
+            helpertext={priceError}
           />
           <TextField
             className={classes.product}
@@ -191,7 +266,8 @@ function ModifyPoduct() {
             value={currency}
             label="Currency"
             onChange={e => setCurrency(e.target.value)}
-            helperText="Please select your currency"
+            error={currencyError ? true : false}
+            helpertext={currencyError}
           >
             {currencies.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -199,6 +275,7 @@ function ModifyPoduct() {
               </MenuItem>
             ))}
           </TextField>
+          <div className={classes.row}>
           <TextField
             className={`${classes.row}, ${classes.product}`}
             value={quantity}
@@ -209,23 +286,30 @@ function ModifyPoduct() {
               shrink: true,
             }}
             onChange={e => setQuantity(e.target.value)}
+            required={true}
+            error={quantityError ? true : false}
+            helpertext={quantityError}
           />
+          </div>
           <input
             accept=".jpg, .jpeg, .png"
             className={classes.input}
             id="upload_file_button"
             type="file"
             onChange={handleUploadClick}
+            required={true}
           />
           <label htmlFor="upload_file_button">
             <Fab component="span" className={classes.button}>
               <AddPhotoAlternateIcon />
             </Fab>
           </label>
-          {imageName !== "" ? imageName : null}
+          
+          {imageName !== "" ? <div className={classes.row}>{imageName}</div> : null}
+          {imageFileError ? <Typography color="secondary" className={classes.row}>{imageFileError}</Typography> : null}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClear} color="primary">
+          <Button onClick={handleClear} color="secondary">
             Clear
           </Button>
           <Button onClick={handleClose} color="primary">
@@ -240,4 +324,4 @@ function ModifyPoduct() {
   );
 }
 
-export default view(ModifyPoduct);
+export default view(AddProduct);
