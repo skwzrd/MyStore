@@ -5,6 +5,8 @@ import { view } from '@risingstack/react-easy-state';
 import Banner from './components/views/Banner';
 import Wrapper from './components/views/Wrapper';
 
+import { ToastContainer } from 'react-toastify';
+
 import Home from './components/containers/Home';
 import About from './components/containers/About';
 import Contact from './components/containers/Contact';
@@ -12,9 +14,6 @@ import Shop from './components/containers/Shop';
 import Cart from './components/containers/Cart';
 import Login from './components/containers/Login';
 import ProductShowcase from './components/views/ProductShowcase';
-
-import { appStore } from './components/stores/AppStore';
-
 
 // configure for our text based pages
 const messages = {
@@ -33,6 +32,7 @@ const messages = {
 function App() {
   return (
     <>
+      <ToastContainer/>
       <Banner/>
       <Router>
         <Wrapper path="/" title={messages.titles.home} child={<Home/>}/>

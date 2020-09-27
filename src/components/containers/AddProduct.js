@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { view } from '@risingstack/react-easy-state';
-import axios from 'axios';
 import { productStore } from '../stores/ProductStore';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { makeStyles } from '@material-ui/core';
@@ -111,27 +109,6 @@ function AddProduct() {
   };
 
 
-  const makeToast = (result, msg) => {
-    const options = {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    };
-
-    
-    if(result === "success"){
-      toast.success(msg, options);
-      setOpen(false);
-      productStore.getAllProducts();
-      return;
-    }
-    toast.error(msg, options);
-  }
-
   const fieldsVerified = () => {
     let verified = true;
     setNameError(init.error);
@@ -170,7 +147,7 @@ function AddProduct() {
     return verified;
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if(!fieldsVerified()){
       return;
     }
@@ -189,33 +166,13 @@ function AddProduct() {
       data.append(key, product[key]);
     }
 
-    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-    axios.post('/products/', data, config)
-    .then(res => {
-      console.log(res.data)
-      console.log("EEEE")
-      makeToast('success', res.data.msg);
-    })
-    .catch(err => makeToast('error', err.stack));
-    
+    await productStore.addProduct(data);
     setOpen(false);
+    await productStore.getAllProducts();
   }
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        />
-      <ToastContainer />
-
       <Button variant="contained" color="primary" onClick={handleClickOpen}>Add</Button>
 
       <Dialog

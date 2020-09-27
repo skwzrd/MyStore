@@ -23,7 +23,6 @@ function Products() {
   const classes = useStyles();
 
   autoEffect(() => {
-    // populate productStore.products
     productStore.getAllProducts();
   }, []);
 

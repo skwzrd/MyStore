@@ -137,14 +137,29 @@ router.delete('/:id', auth, (req, res) => {
 
   pool
   .query(`
-    delete from product
+    select image_filename
+    from product
     where product_id = $1;
   `, [id])
-  .catch(err => errorHandler(err, res));
+  .then(psql => {
+    pool
+    .query(`
+    delete from product
+    where product_id = $1;
+    `, [id])
+    .catch(err => errorHandler(err, res));
+
+    const { image_filename } = makePaths(psql.rows)[0];
+    fs.unlink(__dirname + "/../" + image_filename, (err) => {
+      if(err){
+        console.log(err)
+      }
+    });
+  })
+  .catch(err => errorHandler(err, res))
 
   return res.json({msg: "Product Deleted"});
 
-  // fs.unlink() // TODO
 });
 
 module.exports = router;
