@@ -13,7 +13,7 @@ import Contact from './components/containers/Contact';
 import Shop from './components/containers/Shop';
 import Cart from './components/containers/Cart';
 import Login from './components/containers/Login';
-import ProductShowcase from './components/views/ProductShowcase';
+import GetProduct from './components/containers/GetProduct';
 
 // configure for our text based pages
 const messages = {
@@ -39,7 +39,7 @@ function App() {
         <Wrapper path="/about" title={messages.titles.about} child={<About/>}/>
         <Wrapper path="/contact" title={messages.titles.contact} child={<Contact/>}/>
         <Wrapper path="/shop" title={messages.titles.shop} child={<Shop/>}/>
-        <Wrapper path="/shop/:product_id" child={<ProductShowcase/>}/>
+        <Wrapper path="/shop/:product_id" child={<GetProduct/>}/>
         <Wrapper path="/cart" title={messages.titles.cart} child={<Cart/>}/>
         <Wrapper path="/login" title={messages.titles.login} child={<Login/>}/>
         <Wrapper default title={messages.titles.notFound} />

@@ -1,4 +1,4 @@
-### Summary
+## Summary
 
 ![Preview](resources/snapshot.png)
 
@@ -8,10 +8,10 @@ An e-commerce web app I am working on. This is still in the very early stages of
 - As an opportunity to implement an appealing, modern front end.
 - To learn about e-commerce using the Stripe API.
 
-### Preview
+## Preview
 
 ![Preview](resources/snapshot.gif)
 
-### Latest Look
+## Gallery
 
 ![Preview](resources/snapshot_two.png)

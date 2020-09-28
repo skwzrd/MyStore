@@ -119,15 +119,17 @@ function AddProduct() {
     setImageFileError(init.error);
 
     setName(name.trim());
-    if(!/[a-zA-Z0-9 ]{2,32}/.test(name)){
+    if(!/^[a-zA-Z0-9 ]{2,32}$/.test(name)){
       setNameError("Use 2 to 32 alphanumerics.");
       verified = false;
     }
-    else if(!/[a-zA-Z0-9 ]{2,512}/.test(description)){
+    else if(!/^.{2,512}$/.test(description)){
       setDescriptionError("Use 2 to 512 characters.");
       verified = false;
     }
-    else if(!/^[0-9]{0,5}.[0-9]{0,2}$/.test(price)){
+    else if((!/^[0-9]{0,5}.[0-9]{0,2}$/.test(price))
+              || (isNaN(price))
+              || (Number(price) < 0.00)){
       setPriceError("Invalid price.");
       verified = false;
     }
@@ -191,7 +193,7 @@ function AddProduct() {
             onChange={e => setName(e.target.value)}
             required={true}
             error={nameError ? true : false}
-            helpertext={nameError}
+            helperText={nameError}
           />
           <TextField
             className={`${classes.product} ${classes.row}`}
@@ -204,7 +206,7 @@ function AddProduct() {
             onChange={e => setDescription(e.target.value)}
             required={true}
             error={descriptionError ? true : false}
-            helpertext={descriptionError}
+            helperText={descriptionError}
           />
           <TextField
             className={classes.product}
@@ -213,9 +215,9 @@ function AddProduct() {
             placeholder={"0.00"}
             onChange={e => setPrice(e.target.value)}
             required={true}
-            type="number"
+            type="tel"
             error={priceError ? true : false}
-            helpertext={priceError}
+            helperText={priceError}
           />
           <TextField
             className={classes.product}
@@ -224,7 +226,7 @@ function AddProduct() {
             label="Currency"
             onChange={e => setCurrency(e.target.value)}
             error={currencyError ? true : false}
-            helpertext={currencyError}
+            helperText={currencyError}
           >
             {currencies.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -245,7 +247,7 @@ function AddProduct() {
             onChange={e => setQuantity(e.target.value)}
             required={true}
             error={quantityError ? true : false}
-            helpertext={quantityError}
+            helperText={quantityError}
           />
           </div>
           <input

@@ -3,13 +3,11 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
+import CartButton from '../views/CartButton';
 
 import palette from '../../styles/palette.json';
 
 import { appStore } from '../stores/AppStore';
-import { productStore } from '../stores/ProductStore';
 import { view } from '@risingstack/react-easy-state';
 
 
@@ -52,8 +50,9 @@ const MAX_DESC_LEN = 30;
 
 function ProductCard({ product }) {
   const classes = useStyles();
-
+  
   if(!product.name) return null;
+  
   return (
     <Card className={classes.root}>
       <div className={classes.row}>
@@ -61,7 +60,7 @@ function ProductCard({ product }) {
           {product.name}
         </Typography>
         <div>
-          {appStore.auth ? <Button variant="contained" color="secondary" onClick={(e) => { e.preventDefault(); productStore.removeProduct(product.product_id);}}><DeleteIcon/></Button> : null}
+          <CartButton product={product}/>
         </div>
       </div>
 

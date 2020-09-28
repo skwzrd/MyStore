@@ -1,10 +1,14 @@
 import { toast } from 'react-toastify';
+import { appStore } from '../components/stores/AppStore';
 import { SUCCESS, FAIL } from './constants';
 
 export const toaster = (result, msg) => {
+  if(!appStore.notifications){
+    return;
+  }
   const options = {
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 2000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

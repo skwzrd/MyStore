@@ -29,18 +29,6 @@ const axiosAddProduct = async (formData) => {
 }
 
 
-const axiosGetProduct = async (product_id) => {
-  try {
-    const { data } = await axios.get(`/products/${product_id}`, configJSON)
-    toaster(INFO, "Product retrieved.");
-    return data;
-  } catch (error) {
-    console.error(error);
-    toaster(FAIL, "Couldn't fetch product");
-  }
-}
-
-
 const axiosGetAllProducts = async () => {
   try {
     const { data } = await axios.get("/products", configJSON)
@@ -77,17 +65,24 @@ export const productStore = store({
     return array;
   },
 
-  async getProduct(product_id){
-    const product = await axiosGetProduct(product_id);
-    productStore.setProduct(product);
+  getProduct(product_id){
+    axios.get(`/products/${product_id}`, configJSON)
+    .then(res => {
+      toaster(INFO, "Product retrieved.");
+      productStore.setProduct(res.data);
+    })
+    .catch(error => {
+      console.error(error);
+      toaster(FAIL, "Couldn't fetch product");
+    })
     return productStore.productsById[product_id];
   },
-
+  
   async getAllProducts(){
     productStore.productsById = await axiosGetAllProducts();
     return productStore.productsById;
   },
-
+  
   productExists(product_id){
     return productStore.productsById[product_id] ? productStore.productsById[product_id] : false;
   },
@@ -95,7 +90,7 @@ export const productStore = store({
   async addProduct(product){
     // returns whether it exists in the store or not after db call
     const addedProduct = await axiosAddProduct(product);
-    productStore.productsById[product.product_id] = addedProduct;
+    productStore.setProduct(addedProduct);
   },
 
   setProduct(product){

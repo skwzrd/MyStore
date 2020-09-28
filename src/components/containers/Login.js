@@ -8,7 +8,7 @@ function Login() {
   const log = appStore.auth ? "Logout" : "Login";
   const logAction = appStore.auth ? appStore.logout : appStore.login;
   return (
-    <Button variant="contained" color="primary" onClick={() => logAction()}>{log}</Button>
+    <Button variant="contained" color="primary" style={{width: "7rem"}} onClick={() => logAction()}>{log}</Button>
   )
 }
 

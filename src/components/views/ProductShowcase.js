@@ -1,9 +1,7 @@
 import React from 'react';
-import { useParams } from "@reach/router";
 import { view } from '@risingstack/react-easy-state';
-import { productStore } from '../stores/ProductStore';
 import { appStore } from '../stores/AppStore';
-
+import CartButton from '../views/CartButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
@@ -43,13 +41,10 @@ const useStyles = makeStyles({
 });
 
 
-function ProductShowcase() {
+function ProductShowcase({ product, isLoading }) {
   const classes = useStyles();
-  const params = useParams();
 
-  const { product_id } = params;
-  const product = productStore.getProduct(product_id);
-
+  if(isLoading) return <h1>Loading ...</h1>;
   if(!product) return <h1>Product Not Found</h1>;
 
   return (
@@ -62,7 +57,9 @@ function ProductShowcase() {
         <div className={classes.image_div}>
           <img src={product.image_filename} alt={product.name} className={classes.image}/>
         </div>
-
+        <div className={classes.row}>
+          <CartButton product={product}/>
+        </div>
         <div className={classes.row}>
           <div>{product.price} {product.currency}</div>
           {appStore.auth ? <div>Qty: {product.quantity}</div> : null}
