@@ -15,6 +15,7 @@ import Cart from './components/containers/Cart';
 import Login from './components/containers/Login';
 import GetProduct from './components/containers/GetProduct';
 
+
 // configure for our text based pages
 const messages = {
   titles: {

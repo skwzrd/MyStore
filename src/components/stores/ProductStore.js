@@ -59,9 +59,11 @@ export const productStore = store({
 
   get productArray(){
     let array = [];
-    Object.keys(productStore.productsById).map(key => {
-      return array.push(productStore.productsById[key]);
-    })
+    if(productStore.productsById){
+      Object.keys(productStore.productsById).map(key => {
+        return array.push(productStore.productsById[key]);
+      })
+    }
     return array;
   },
 

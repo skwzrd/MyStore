@@ -19,6 +19,7 @@ const CartButton = ({ product }) => {
   else{
     btn = <Button variant="contained" color="primary" onClick={(e) => { e.preventDefault(); cartStore.addToCart(product);}}><ShoppingCartIcon/></Button>;
   }
+  cartStore.addToCart(product)
   return btn;
 };
 
