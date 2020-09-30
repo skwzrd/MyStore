@@ -1,7 +1,7 @@
 import React from 'react';
 import { view } from '@risingstack/react-easy-state';
 import { appStore } from '../stores/AppStore';
-import CartButton from '../views/CartButton';
+import CartButton from './CartButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';

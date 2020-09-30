@@ -15,7 +15,16 @@ export const cartStore = store({
     return itemList;
   },
 
-  get total(){
+  get total() {
+    let total = 0.00;
+    Object.keys(cartStore.items).map(item_id => {
+      total += Number(cartStore.items[item_id].price);
+      return null;
+    })
+    return total.toFixed(2);
+  },
+
+  get totalString(){
     let total = {};
     let total_string = "";
     Object.keys(cartStore.items).map(item_id => {
@@ -45,5 +54,9 @@ export const cartStore = store({
   existsInCart(product){
     return cartStore.items[product.product_id] ? true : false;
   },
+
+  clearCart(){
+    cartStore.items = {};
+  }
 
 });

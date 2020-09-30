@@ -1,41 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import { useBodyStyle } from '../../styles/BodyStyle';
 import { cartStore } from '../stores/CartStore';
-import { view } from '@risingstack/react-easy-state';
-import { makeStyles } from '@material-ui/core/styles';
-import { Link } from '@reach/router';
-import palette from '../../styles/palette.json';
+import PurchaseForm from './PurchaseForm';
 
-const useStyles = makeStyles({
-  root: {
-    paddingLeft: "16px",
-    display: "block",
-    color: palette.text,
-    textDecoration: "underline",
-    background: palette.button_hover,
-  },
-});
+import { view } from '@risingstack/react-easy-state';
+
+import Button from '@material-ui/core/Button';
+
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+import CartItem from '../views/CartItem';
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
 
 function Cart() {
-  const fine_classes = useStyles();
   const course_classes = useBodyStyle();
+
+  const [open, setOpen] = useState(false);
 
   return (
     <div className={course_classes.root}>
       {
         cartStore.itemCount > 0
         ?
-          <>
-            <p>Total Items: {cartStore.itemCount}</p>
-            {cartStore.itemList.map((item, i) => {
-              return <Link to={"/shop/"+String(item.product_id)} key={i} className={fine_classes.root}>
-                {i+1}. {item.name} {Number(item.price).toFixed(2)} {item.currency}
-              </Link>
-            })}
-            <p>Total Price: {cartStore.total} {cartStore.totalCurrency}</p>
-          </>
+        <>
+          <p>Total Items: {cartStore.itemCount}</p>
+          
+          {cartStore.itemList.map((item, i) => {
+            return <CartItem item={item} key={item.product_id}/>
+          })}
+
+          <p>Total Price: {cartStore.totalString} {cartStore.totalStringCurrency}</p>
+
+          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>Checkout</Button>
+          <Elements stripe={stripePromise}>
+            <PurchaseForm open={open} price={cartStore.total} setOpen={setOpen}/>
+          </Elements>
+        </>
         :
-        <p>Nothing in your cart.</p>
+        <>
+          <p>Nothing in your cart.</p>
+        </>
       }
     </div>
   )

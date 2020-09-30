@@ -13,7 +13,9 @@ import Contact from './components/containers/Contact';
 import Shop from './components/containers/Shop';
 import Cart from './components/containers/Cart';
 import Login from './components/containers/Login';
+import ThankYou from './components/views/ThankYou';
 import GetProduct from './components/containers/GetProduct';
+
 
 // configure for our text based pages
 const messages = {
@@ -24,6 +26,7 @@ const messages = {
     shop: "Shop",
     cart: "Your Cart",
     login: "Login",
+    thankyou: "Thank You!",
     notFound: "404 Page Not Found"
   }
 }
@@ -42,6 +45,7 @@ function App() {
         <Wrapper path="/shop/:product_id" child={<GetProduct/>}/>
         <Wrapper path="/cart" title={messages.titles.cart} child={<Cart/>}/>
         <Wrapper path="/login" title={messages.titles.login} child={<Login/>}/>
+        <Wrapper path="/thankyou" title={messages.titles.thankyou} child={<ThankYou/>}/>
         <Wrapper default title={messages.titles.notFound} />
       </Router>
     </>
