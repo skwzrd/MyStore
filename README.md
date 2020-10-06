@@ -1,6 +1,6 @@
 ## Summary
 
-![Preview](resources/home.png)
+![Preview](resources/Home.png)
 
 An e-commerce web app I am working on. This is still in the very early stages of development. I am using this project:
 - As a means to become familiar with JS PostgreSQL libraries and JS REST API's.
