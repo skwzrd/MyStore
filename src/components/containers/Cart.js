@@ -40,7 +40,6 @@ function Cart() {
           <p>Nothing in your cart.</p>
         </>
       }
-      <Shop/>
     </div>
   )
 }
