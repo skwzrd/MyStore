@@ -21,6 +21,7 @@ const CartButton = ({ product }) => {
   }
   // testing
   // cartStore.addToCart(product);
+
   return btn;
 };
 

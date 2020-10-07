@@ -12,14 +12,16 @@ import StripeFields from './StripeForm';
 import axios from "axios";
 
 import { useElements, useStripe } from '@stripe/react-stripe-js';
+
 import { cartStore } from '../stores/CartStore';
 
 import { navigate } from "@reach/router";
 
+
 function PurchaseForm({ open, setOpen, price }) {
   const stripe = useStripe();
   const elements = useElements();
-  
+
   // testing
   // const blankDetails = {
   //   firstName: "",
@@ -60,7 +62,7 @@ function PurchaseForm({ open, setOpen, price }) {
 
   const handleFormSubmit = async ev => {
     ev.preventDefault();
-    
+
     const billingDetails = {
       name: details.firstName + " " + details.lastName,
       email: details.email,
@@ -72,7 +74,7 @@ function PurchaseForm({ open, setOpen, price }) {
       }
     };
     setProcessing(true);
-    
+
     const cardElement = elements.getElement("card");
 
     try {
@@ -83,7 +85,7 @@ function PurchaseForm({ open, setOpen, price }) {
           amount: price * 100,
         },
       );
-  
+
       const paymentMethodReq = await stripe.createPaymentMethod({
         type: "card",
         card: cardElement,
@@ -105,10 +107,11 @@ function PurchaseForm({ open, setOpen, price }) {
         setProcessing(false);
         return;
       }
-
+      
       setOpen(false);
       cartStore.clearCart();
       navigate('/thankyou');
+
     } catch (err) {
       setCheckoutError(err.message);
     }

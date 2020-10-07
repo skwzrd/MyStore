@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
-
 import { useBodyStyle } from '../../styles/BodyStyle';
 import { cartStore } from '../stores/CartStore';
 import PurchaseForm from './PurchaseForm';
-
 import { view } from '@risingstack/react-easy-state';
-
 import Button from '@material-ui/core/Button';
-
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-
 import CartItem from '../views/CartItem';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-
 
 function Cart() {
   const course_classes = useBodyStyle();
@@ -40,11 +34,13 @@ function Cart() {
             <PurchaseForm open={open} price={cartStore.total} setOpen={setOpen}/>
           </Elements>
         </>
+
         :
         <>
           <p>Nothing in your cart.</p>
         </>
       }
+      <Shop/>
     </div>
   )
 }
