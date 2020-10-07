@@ -1,14 +1,14 @@
+require('dotenv').config();
+
 const express = require('express');
 const auth = require('../middleware/auth');
 const stripe = require("stripe")(process.env.REACT_APP_STRIPE_SECRET_KEY);
 const bodyParser = require('body-parser');
-console.log(process.env.REACT_APP_STRIPE_SECRET_KEY);
 
 const router = express.Router();
 
 router.post('/create', bodyParser.json(), async (req, res) => {
   try {
-    console.log(req.body, " EEEE")
     const { amount } = req.body;
     // Psst. For production-ready applications we recommend not using the
     // amount directly from the client without verifying it first. This is to
@@ -19,7 +19,7 @@ router.post('/create', bodyParser.json(), async (req, res) => {
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency: "usd"
+      currency: "cad"
     });
 
     res.status(200).send(paymentIntent.client_secret);

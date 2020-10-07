@@ -13,18 +13,34 @@ import axios from "axios";
 
 import { useElements, useStripe } from '@stripe/react-stripe-js';
 
+import { cartStore } from '../stores/CartStore';
+
+import { navigate } from "@reach/router";
+
+
 function PurchaseForm({ open, setOpen, price }) {
   const stripe = useStripe();
   const elements = useElements();
 
+  // testing
+  // const blankDetails = {
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   address: "",
+  //   postalCode: "",
+  //   city: "",
+  //   province: "",
+  // }
+
   const blankDetails = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    address: "",
-    postalCode: "",
-    city: "",
-    province: "",
+    firstName: "FIRST",
+    lastName: "LAST",
+    email: "EMAIL@gmail.com",
+    address: "12345",
+    postalCode: "12345",
+    city: "CITY",
+    province: "PROVINCE",
   }
   const [details, setDetails] = useState(blankDetails);
   const [isProcessing, setProcessing] = useState(false);
@@ -58,13 +74,16 @@ function PurchaseForm({ open, setOpen, price }) {
       }
     };
     setProcessing(true);
+
     const cardElement = elements.getElement("card");
 
     try {
+
       const { data: clientSecret } = await axios.post(
         "/orders/create",
-        {amount: price * 100},
-        {headers: { 'Content-Type': 'application/json' }}
+        {
+          amount: price * 100,
+        },
       );
 
       const paymentMethodReq = await stripe.createPaymentMethod({
@@ -88,8 +107,11 @@ function PurchaseForm({ open, setOpen, price }) {
         setProcessing(false);
         return;
       }
+      
+      setOpen(false);
+      cartStore.clearCart();
+      navigate('/thankyou');
 
-      alert("Payment Successful.")
     } catch (err) {
       setCheckoutError(err.message);
     }

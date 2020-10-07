@@ -18,7 +18,6 @@ const useStyles = makeStyles({
   }
 });
 
-
 function Products() {
   const classes = useStyles();
 

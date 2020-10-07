@@ -21,7 +21,7 @@ export const cartStore = store({
       total += Number(cartStore.items[item_id].price);
       return null;
     })
-    return total;
+    return total.toFixed(2);
   },
 
   get totalString(){
@@ -54,5 +54,9 @@ export const cartStore = store({
   existsInCart(product){
     return cartStore.items[product.product_id] ? true : false;
   },
+
+  clearCart(){
+    cartStore.items = {};
+  }
 
 });
