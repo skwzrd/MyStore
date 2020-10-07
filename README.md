@@ -14,10 +14,14 @@ An e-commerce web app I am working on. This is still in the very early stages of
 
 ## Gallery
 
-#### Shop
+### Shop
 
 ![Preview](resources/Shop.png)
 
-#### Cart
+### Cart
 
 ![Preview](resources/Cart.png)
+
+### Add Product
+
+![Preview](resources/AddProduct.png)

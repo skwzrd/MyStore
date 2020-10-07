@@ -9,8 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@material-ui/core/MenuItem';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import Checkbox from '@material-ui/core/Checkbox';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Fab from "@material-ui/core/Fab";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
@@ -50,6 +52,7 @@ function AddProduct() {
     quantity: "",
     imageFile: null,
     imageName: "",
+    watermark: false,
 
     error: "",
   }
@@ -62,6 +65,7 @@ function AddProduct() {
   const [quantity, setQuantity] = useState(init.quantity);
   const [imageFile, setImageFile] = useState(init.imageFile);
   const [imageName, setImageName] = useState(init.imageName);
+  const [watermark, setWatermark] = useState(init.watermark);
   
   const [nameError, setNameError] = useState(init.error);
   const [descriptionError, setDescriptionError] = useState(init.error);
@@ -159,7 +163,8 @@ function AddProduct() {
       description: description,
       price: price,
       currency: currency,
-      quantity: quantity
+      quantity: quantity,
+      watermark: watermark,
     }
 
     const data = new FormData();
@@ -264,6 +269,16 @@ function AddProduct() {
             </Fab>
           </label>
           
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={watermark}
+                onChange={() => setWatermark(!watermark)}
+                color="primary"
+              />
+            }
+            label="Watermark Image"
+          />
           {imageName !== "" ? <div className={classes.row}>{imageName}</div> : null}
           {imageFileError ? <Typography color="secondary" className={classes.row}>{imageFileError}</Typography> : null}
         </DialogContent>

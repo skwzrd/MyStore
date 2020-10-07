@@ -1,17 +1,25 @@
 const express = require('express')
-const auth = require('../middleware/auth')
 const pool = require('../utils/db_connect')
 const uuid = require('uuid');
 const fs = require('fs');
-
+const path = require('path');
 const multer  = require('multer');
+
+const auth = require('../middleware/auth');
+const {
+  image_path,
+  wm_image_path,
+  waterMark,
+  makePaths,
+} = require('../utils/misc');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/');
+    cb(null, image_path(''));
   },
   filename: function (req, file, cb) {
-    cb(null, uuid.v4() + "." + file.originalname.split(".")[1]);
+    const uniqueName = uuid.v4();
+    cb(null, uniqueName + path.extname(file.originalname));
   }
 })
 
@@ -31,13 +39,6 @@ const validateNumber = (num, msg, res) => {
 const errorHandler = (err, res) => {
   console.error('Error executing query: ', err.stack)
   res.status(404).json({msg: "Page Not Found"})
-}
-
-const makePaths = (rows) => {
-  rows.forEach((row, i) => {
-    rows[i].image_filename = `/uploads/${row.image_filename}`;
-  });
-  return rows;
 }
 
 // @desc get all products
@@ -82,6 +83,18 @@ router.get('/page/:page', (req, res) => {
 // @desc creates a product
 // @access private
 router.post('/', auth, upload.single("imageFile"), (req, res) => {
+  const filename = req.file.filename;
+  if(req.body.watermark==='true'){
+    waterMark(image_path(filename), wm_image_path(filename));
+  }
+  else{
+    fs.rename(image_path(filename), wm_image_path(filename), (error) => {
+      if (error){
+        console.log(error)
+      }
+    })
+  }
+
   pool
   .query(`
     insert into product (
@@ -100,7 +113,7 @@ router.post('/', auth, upload.single("imageFile"), (req, res) => {
       Number(req.body.price),
       req.body.currency,
       req.file.filename,
-      req.file.originalname.split(".")[1],
+      path.extname(req.file.originalname),
       Number(req.body.quantity)
     ]
   )
@@ -149,8 +162,13 @@ router.delete('/:id', auth, (req, res) => {
     `, [id])
     .catch(err => errorHandler(err, res));
 
-    const { image_filename } = makePaths(psql.rows)[0];
-    fs.unlink(__dirname + "/../" + image_filename, (error) => {
+    const { image_filename } = psql.rows[0];
+    fs.unlink(wm_image_path(image_filename), (error) => {
+      if(error){
+        console.error(error)
+      }
+    });
+    fs.unlink(image_path(image_filename), (error) => {
       if(error){
         console.error(error)
       }
